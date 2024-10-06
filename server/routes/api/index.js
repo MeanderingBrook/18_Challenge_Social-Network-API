@@ -1,4 +1,4 @@
-// Requires Node Modules
+// Imports required Node.js Modules
 const router = require("express").Router();
 
 // Defines App Directory location of Routes
@@ -6,6 +6,7 @@ const userRoutes = require("./userRoutes");
 const thoughtRoutes = require("./thoughtRoutes");
 
 // Defines Routes for HTML Paths (e.g., /api)
+// Note: Prefixed by, api/
 router.use("/users", userRoutes);
 router.use("/thoughts", thoughtRoutes);
 

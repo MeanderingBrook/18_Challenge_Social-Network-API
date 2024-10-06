@@ -1,39 +1,42 @@
-// Requires Node Modules
+// Imports required Node.js Modules
 const router = require("express").Router();
 
 // Imports required Application Modules
 // Defines User Management Variables referencing User Controller
-const userController = require("../../controllers/userController");
+// Note: Methods MUST be deconstructed in {} since they're bundled under "userController"
 const {
-  getAllUsers,
-  // getUserByID,
-  // newUser,
-  // updateUser,
-  // deleteUser,
+  getUsers,
+  getUser,
+  newUser,
+  updateUser,
+  deleteUser,
+  addFriend,
+  removeFriend,
 } = require("../../controllers/userController");
-//const getAllUsers = require("../../controllers/userController");
-//const newUser = require("../../controllers/userController");
-//const updateUser = require("../../controllers/userController");
-//const deleteUser = require("../../controllers/userController");
 
-// Defines GET Route for All Users
+// // Defines GET Route for All Users
+// // Note: Prefixed by, api/users
+router.route("/").get(getUsers);
+
+// Defines GET Route for User by ID
 // Note: Prefixed by, api/users
-router.route("/").get(getAllUsers);
+router.route("/:userId").get(getUser);
 
-// // Defines GET Route for User by ID
-// // Note: Prefixed by, api/users
-// router.route("/:userID").get(getUserByID);
+// Defines POST Route for New User
+// Note: Prefixed by, api/users
+router.route("/").post(newUser);
 
-// // Defines POST Route for New User
-// // Note: Prefixed by, api/users
-// router.route("/").post(newUser);
+// Defines PUT Route for User by ID
+// Note: Prefixed by, api/users
+router.route("/:userId").put(updateUser);
 
-// // Defines PUT Route for User by ID
-// // Note: Prefixed by, api/users
-// router.route("/userID").put(updateUser);
+// Defines DELETE Route for User by ID
+// Note: Prefixed by, api/users
+router.route("/:userId").delete(deleteUser);
 
-// // Defines DELETE Route for User by ID
-// // Note: Prefixed by, api/users
-// router.route("/userID").delete(deleteUser);
+// Defines GET Route for User Friends
+// Note: Prefixed by, api/users
+router.route("/:userId/friends/:friendId").post(addFriend).delete(removeFriend);
 
+// Exports Routes for use in App
 module.exports = router;

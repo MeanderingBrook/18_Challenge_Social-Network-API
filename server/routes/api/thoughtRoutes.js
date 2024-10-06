@@ -1,32 +1,44 @@
-// Requires Node Modules
+// Imports required Node.js Modules
 const router = require("express").Router();
 
 // Imports required Application Modules
-// Defines Thought Management Variables referencing Thought Controller
-const getAllThoughts = require("../../controllers/thoughtController");
-const getThoughtByID = require("../../controllers/thoughtController");
-const newThought = require("../../controllers/thoughtController");
-const updateThought = require("../../controllers/thoughtController");
-const deleteThought = require("../../controllers/thoughtController");
+// Defines Thought Management Variables referencing User Controller
+// Note: Methods MUST be deconstructed in {} since they're bundled under "thoughtController"
+const {
+  getThoughts,
+  getThought,
+  newThought,
+  updateThought,
+  deleteThought,
+  addReaction,
+  removeReaction,
+} = require("../../controllers/thoughtController");
 
 // Defines GET Route for All Thoughts
 // Note: Prefixed by, api/thoughts
-//router.route("/").get(getAllThoughts);
+router.route("/").get(getThoughts);
 
 // Defines GET Route for Thought by ID
 // Note: Prefixed by, api/thoughts
-//router.route("/thoughtID").get(getThoughtByID);
+router.route("/:thoughtId").get(getThought);
 
-// Defines POST Route for New User
+// Defines POST Route for New Thought
 // Note: Prefixed by, api/thoughts
-//router.route("/").post(newThought);
+router.route("/").post(newThought);
 
-// Defines PUT Route for User by ID
+// Defines PUT Route for Thought by ID
 // Note: Prefixed by, api/thoughts
-//router.route("/thoughtID").put(updateThought);
+router.route("/:thoughtId").put(updateThought);
 
-// Defines DELETE Route for User by ID
-// Note: Prefixed by, api/users
-//router.route("/thoughtID").delete(deleteThought);
+// Defines DELETE Route for Thought by ID
+// Note: Prefixed by, api/thoughts
+router.route("/:thoughtId").delete(deleteThought);
 
+// /api/thoughts/:thoughtId/reactions
+router.route("/:thoughtId/reactions").post(addReaction);
+
+// /api/thoughts/:thoughtId/reactions/:reactionId
+router.route("/:thoughtId/reactions/:reactionId").delete(removeReaction);
+
+// Exports Routes for use in App
 module.exports = router;

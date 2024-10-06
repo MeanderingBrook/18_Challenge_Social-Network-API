@@ -8,7 +8,7 @@ const userSchema = new Schema(
       unique: true,
       required: true,
     },
-    email: {
+    emailAddress: {
       type: String,
       unique: true,
       required: true,
@@ -17,6 +17,12 @@ const userSchema = new Schema(
       {
         type: Schema.Types.ObjectId,
         ref: "Thought",
+      },
+    ],
+    friends: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "User",
       },
     ],
   },
@@ -28,6 +34,12 @@ const userSchema = new Schema(
   }
 );
 
+userSchema.virtual("friendCount").get(function () {
+  return this.friends.length;
+});
+
+// Assigns User Model to Constant
 const User = model("User", userSchema);
 
+// Exports Model for use in App
 module.exports = User;

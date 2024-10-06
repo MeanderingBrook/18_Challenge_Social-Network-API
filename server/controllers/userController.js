@@ -1,32 +1,168 @@
 // Imports required App Modules
 const { User, Thought } = require("../models");
 
-//const userController = {
 const userController = {
-  async getAllUsers(req, res) {
-    console.log("Fetching All Users");
+  // get all users
+  async getUsers(req, res) {
     try {
-      const allUsers = await User.find().select("-__v");
+      const dbUserData = await User.find().select("-__v");
 
-      res.json(allUsers);
+      res.json(dbUserData);
     } catch (err) {
       console.log(err);
       res.json(err);
     }
   },
-};
+  // get single user by id
+  async getUser(req, res) {
+    try {
+      const dbUserData = await User.findOne({ _id: req.params.userId })
+        .select("-__v")
+        .populate("friends")
+        .populate("thoughts");
 
-/*
-module.exports = getAllUsers = async (req, res) => {
-  try {
-    const allUsers = await User.find().select("-__v");
+      if (!dbUserData) {
+        return res.status(404).json({ message: "No user with this id!" });
+      }
 
-    res.json(allUsers);
-  } catch (err) {
-    console.log(err);
-    res.json(err);
-  }
+      res.json(dbUserData);
+    } catch (err) {
+      console.log(err);
+      res.json(err);
+    }
+  },
+  // create a new user
+  async newUser(req, res) {
+    console.log("Incoming Data: ", req.body);
+
+    let testUser = {
+      userName: req.body.userName,
+      emailAddress: req.body.emailAddress,
+    };
+
+    try {
+      // const dbUserData = await User.create(req.body);
+      const dbUserData = await User.create(testUser);
+      res.json(dbUserData);
+    } catch (err) {
+      console.log(err);
+      res.status(500).json(err);
+    }
+  },
+  // update a user
+  async updateUser(req, res) {
+    try {
+      const dbUserData = await User.findOneAndUpdate(
+        { _id: req.params.userId },
+        {
+          $set: req.body,
+        },
+        {
+          runValidators: true,
+          new: true,
+        }
+      );
+
+      if (!dbUserData) {
+        return res.status(404).json({ message: "No user with this id!" });
+      }
+
+      res.json(dbUserData);
+    } catch (err) {
+      console.log(err);
+      res.status(500).json(err);
+    }
+  },
+  // delete user (BONUS: and delete associated thoughts)
+  async deleteUser(req, res) {
+    try {
+      const dbUserData = await User.findOneAndDelete({
+        _id: req.params.userId,
+      });
+
+      if (!dbUserData) {
+        return res.status(404).json({ message: "No user with this id!" });
+      }
+
+      // BONUS: get ids of user's `thoughts` and delete them all
+      await Thought.deleteMany({ _id: { $in: dbUserData.thoughts } });
+      res.json({ message: "User and associated thoughts deleted!" });
+    } catch (err) {
+      console.log(err);
+      res.status(500).json(err);
+    }
+  },
+
+  // add friend to friend list
+  async addFriend(req, res) {
+    try {
+      const dbUserData = await User.findOneAndUpdate(
+        { _id: req.params.userId },
+        { $addToSet: { friends: req.params.friendId } },
+        { new: true }
+      );
+
+      if (!dbUserData) {
+        return res.status(404).json({ message: "No user with this id!" });
+      }
+
+      res.json(dbUserData);
+    } catch (err) {
+      console.log(err);
+      res.status(500).json(err);
+    }
+  },
+  // remove friend from friend list
+  async removeFriend(req, res) {
+    try {
+      const dbUserData = await User.findOneAndUpdate(
+        { _id: req.params.userId },
+        { $pull: { friends: req.params.friendId } },
+        { new: true }
+      );
+
+      if (!dbUserData) {
+        return res.status(404).json({ message: "No user with this id!" });
+      }
+
+      res.json(dbUserData);
+    } catch (err) {
+      console.log(err);
+      res.status(500).json(err);
+    }
+  },
 };
-*/
 
 module.exports = userController;
+
+// const { User, Thought } = require("../models");
+
+// //const userController = {
+// const userController = {
+//   async getAllUsers(req, res) {
+//     console.log("Fetching All Users");
+//     try {
+//       const allUsers = await User.find().select("-__v");
+
+//       res.json(allUsers);
+//     } catch (err) {
+//       console.log(err);
+//       res.json(err);
+//     }
+//   },
+// };
+
+// /*
+// module.exports = getAllUsers = async (req, res) => {
+//   try {
+//     const allUsers = await User.find().select("-__v");
+
+//     res.json(allUsers);
+//   } catch (err) {
+//     console.log(err);
+//     res.json(err);
+//   }
+// };
+// */
+
+// module.exports = userController;
