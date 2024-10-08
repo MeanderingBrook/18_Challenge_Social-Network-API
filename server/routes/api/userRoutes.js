@@ -36,7 +36,7 @@ router.route("/:userId").delete(deleteUser);
 
 // Defines GET Route for User Friends
 // Note: Prefixed by, api/users
-router.route("/:userId/friends/:friendId").post(addFriend).delete(removeFriend);
+// router.route("/:userId/friends/:friendId").post(addFriend).delete(removeFriend);
 
 // Exports Routes for use in App
 module.exports = router;

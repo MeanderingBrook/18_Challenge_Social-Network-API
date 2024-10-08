@@ -5,6 +5,7 @@ const { Thought, User } = require("../models");
 // Methods deconstructed in thoughtRoutes.js
 const thoughtController = {
   // Defines GET Method for All Thoughts
+  // http://localhost:3001/api/thoughts
   async getThoughts(req, res) {
     try {
       const thoughtData = await Thought.find().sort({ createdAt: -1 });
@@ -18,6 +19,7 @@ const thoughtController = {
   },
 
   // Defines GET Method for a Thought by ID
+  // http://localhost:3001/api/thoughts/:thoughtId
   async getThought(req, res) {
     try {
       const thoughtData = await Thought.findOne({
@@ -38,6 +40,7 @@ const thoughtController = {
   },
 
   // Defines POST Method for New Thought
+  // http://localhost:3001/api/thoughts
   async newThought(req, res) {
     try {
       const thoughtData = await Thought.create(req.body);
@@ -63,6 +66,7 @@ const thoughtController = {
   },
 
   // Defines PUT Method for existing Thought by ID
+  // http://localhost:3001/api/thoughts/:thoughtId
   async updateThought(req, res) {
     try {
       const thoughtData = await Thought.findOneAndUpdate(
@@ -85,9 +89,10 @@ const thoughtController = {
   },
 
   // Defines DELETE Method for existing Thought by ID
+  // http://localhost:3001/api/thoughts/:thoughtId
   async deleteThought(req, res) {
     try {
-      const thoughtData = await Thought.findOneAndRemove({
+      const thoughtData = await Thought.findOneAndDelete({
         _id: req.params.thoughtId,
       });
 
@@ -97,8 +102,8 @@ const thoughtController = {
         });
       }
 
-      // remove thought id from user's `thoughts` field
-      const userData = User.findOneAndUpdate(
+      // Deletes Thought from associated User
+      const userData = await User.findOneAndUpdate(
         { thoughts: req.params.thoughtId },
         { $pull: { thoughts: req.params.thoughtId } },
         { new: true }
@@ -117,44 +122,46 @@ const thoughtController = {
     }
   },
 
-  // add a reaction to a thought
-  async addReaction(req, res) {
-    try {
-      const thoughtData = await Thought.findOneAndUpdate(
-        { _id: req.params.thoughtId },
-        { $addToSet: { reactions: req.body } },
-        { runValidators: true, new: true }
-      );
+  // // // // //
+  // // add a reaction to a thought
+  // async addReaction(req, res) {
+  //   try {
+  //     const thoughtData = await Thought.findOneAndUpdate(
+  //       { _id: req.params.thoughtId },
+  //       { $addToSet: { reactions: req.body } },
+  //       { runValidators: true, new: true }
+  //     );
 
-      if (!thoughtData) {
-        return res.status(404).json({ message: "No thought with this id!" });
-      }
+  //     if (!thoughtData) {
+  //       return res.status(404).json({ message: "No thought with this id!" });
+  //     }
 
-      res.json(thoughtData);
-    } catch (err) {
-      console.log(err);
-      res.status(500).json(err);
-    }
-  },
-  // remove reaction from a thought
-  async removeReaction(req, res) {
-    try {
-      const thoughtData = await Thought.findOneAndUpdate(
-        { _id: req.params.thoughtId },
-        { $pull: { reactions: { reactionId: req.params.reactionId } } },
-        { runValidators: true, new: true }
-      );
+  //     res.json(thoughtData);
+  //   } catch (err) {
+  //     console.log(err);
+  //     res.status(500).json(err);
+  //   }
+  // },
+  // // remove reaction from a thought
+  // async removeReaction(req, res) {
+  //   try {
+  //     const thoughtData = await Thought.findOneAndUpdate(
+  //       { _id: req.params.thoughtId },
+  //       { $pull: { reactions: { reactionId: req.params.reactionId } } },
+  //       { runValidators: true, new: true }
+  //     );
 
-      if (!thoughtData) {
-        return res.status(404).json({ message: "No thought with this id!" });
-      }
+  //     if (!thoughtData) {
+  //       return res.status(404).json({ message: "No thought with this id!" });
+  //     }
 
-      res.json(thoughtData);
-    } catch (err) {
-      console.log(err);
-      res.status(500).json(err);
-    }
-  },
+  //     res.json(thoughtData);
+  //   } catch (err) {
+  //     console.log(err);
+  //     res.status(500).json(err);
+  //   }
+  // },
+  // // // // //
 };
 
 // Exports thoughtController and all Methods as Module
