@@ -11,12 +11,11 @@ const thoughtSchema = new Schema(
       type: String,
       required: true,
       minlength: 10,
-      maxlength: 100,
     },
     createdAt: {
       type: Date,
       default: Date.now,
-      get: (timestamp) => dateFormat(timestamp),
+      // get: (timestamp) => dateFormat(timestamp),
     },
     userName: {
       type: String,
