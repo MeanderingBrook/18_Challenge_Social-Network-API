@@ -14,11 +14,11 @@ const {
   removeFriend,
 } = require("../../controllers/userController");
 
-// // Defines GET Route for All Users
-// // Note: Prefixed by, api/users
+// Defines GET Route for All Users
+// Note: Prefixed by, api/users
 router.route("/").get(getUsers);
 
-// Defines GET Route for User by ID
+// Defines GET Route for existing User by ID
 // Note: Prefixed by, api/users
 router.route("/:userId").get(getUser);
 
@@ -26,7 +26,7 @@ router.route("/:userId").get(getUser);
 // Note: Prefixed by, api/users
 router.route("/").post(newUser);
 
-// Defines PUT Route for User by ID
+// Defines PUT Route for existing User by ID
 // Note: Prefixed by, api/users
 router.route("/:userId").put(updateUser);
 

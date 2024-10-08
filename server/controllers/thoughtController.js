@@ -1,119 +1,136 @@
+// Imports required App Modules
 const { Thought, User } = require("../models");
 
+// Assigns all Thought Methods to 'thoughtController' Variable
+// Methods deconstructed in thoughtRoutes.js
 const thoughtController = {
-  // get all thoughts
+  // Defines GET Method for All Thoughts
   async getThoughts(req, res) {
     try {
-      const dbThoughtData = await Thought.find().sort({ createdAt: -1 });
+      const thoughtData = await Thought.find().sort({ createdAt: -1 });
+      // console.log("thoughtController Line 11: All Thoughts:", thoughtData);
 
-      res.json(dbThoughtData);
+      res.json(thoughtData);
     } catch (err) {
       console.log(err);
-      res.status(500).json(err);
+      res.json(err);
     }
   },
-  // get single thought by id
+
+  // Defines GET Method for a Thought by ID
   async getThought(req, res) {
     try {
-      const dbThoughtData = await Thought.findOne({
+      const thoughtData = await Thought.findOne({
         _id: req.params.thoughtId,
       });
 
-      if (!dbThoughtData) {
-        return res.status(404).json({ message: "No thought with this id!" });
+      if (!thoughtData) {
+        return res.json({
+          message: "Thought with the submitted ID does not exist.",
+        });
       }
 
-      res.json(dbThoughtData);
+      res.json(thoughtData);
     } catch (err) {
       console.log(err);
-      res.status(500).json(err);
+      res.json(err);
     }
   },
-  // create a thought
+
+  // Defines POST Method for New Thought
   async newThought(req, res) {
     try {
-      const dbThoughtData = await Thought.create(req.body);
+      const thoughtData = await Thought.create(req.body);
 
-      const dbUserData = await User.findOneAndUpdate(
+      const userData = await User.findOneAndUpdate(
         { _id: req.body.userId },
-        { $push: { thoughts: dbThoughtData._id } },
+        { $push: { thoughts: thoughtData._id } },
         { new: true }
       );
 
-      if (!dbUserData) {
-        return res
-          .status(404)
-          .json({ message: "Thought created but no user with this id!" });
+      if (!userData) {
+        return res.json({
+          message: "Thought is not associated with a User.",
+        });
       }
 
-      res.json({ message: "Thought successfully created!" });
+      // res.json({ message: "New Thought created." });
+      res.json(thoughtData);
     } catch (err) {
       console.log(err);
-      res.status(500).json(err);
+      res.json(err);
     }
   },
-  // update thought
+
+  // Defines PUT Method for existing Thought by ID
   async updateThought(req, res) {
-    const dbThoughtData = await Thought.findOneAndUpdate(
-      { _id: req.params.thoughtId },
-      { $set: req.body },
-      { runValidators: true, new: true }
-    );
+    try {
+      const thoughtData = await Thought.findOneAndUpdate(
+        { _id: req.params.thoughtId },
+        { $set: req.body },
+        { runValidators: true, new: true }
+      );
 
-    if (!dbThoughtData) {
-      return res.status(404).json({ message: "No thought with this id!" });
+      if (!thoughtData) {
+        return res.json({
+          message: "Thought with the submitted ID does not exist.",
+        });
+      }
+
+      res.json(thoughtData);
+    } catch (err) {
+      console.log(err);
+      res.json(err);
     }
-
-    res.json(dbThoughtData);
-
-    console.log(err);
-    res.status(500).json(err);
   },
-  // delete thought
+
+  // Defines DELETE Method for existing Thought by ID
   async deleteThought(req, res) {
     try {
-      const dbThoughtData = await Thought.findOneAndRemove({
+      const thoughtData = await Thought.findOneAndRemove({
         _id: req.params.thoughtId,
       });
 
-      if (!dbThoughtData) {
-        return res.status(404).json({ message: "No thought with this id!" });
+      if (!thoughtData) {
+        return res.json({
+          message: "Thought with the submitted ID does not exist.",
+        });
       }
 
       // remove thought id from user's `thoughts` field
-      const dbUserData = User.findOneAndUpdate(
+      const userData = User.findOneAndUpdate(
         { thoughts: req.params.thoughtId },
         { $pull: { thoughts: req.params.thoughtId } },
         { new: true }
       );
 
-      if (!dbUserData) {
-        return res
-          .status(404)
-          .json({ message: "Thought created but no user with this id!" });
+      if (!userData) {
+        return res.json({
+          message: "Thought is not associated with a User.",
+        });
       }
 
-      res.json({ message: "Thought successfully deleted!" });
+      res.json({ message: "Thought was deleted." });
     } catch (err) {
       console.log(err);
-      res.status(500).json(err);
+      res.json(err);
     }
   },
 
   // add a reaction to a thought
   async addReaction(req, res) {
     try {
-      const dbThoughtData = await Thought.findOneAndUpdate(
+      const thoughtData = await Thought.findOneAndUpdate(
         { _id: req.params.thoughtId },
         { $addToSet: { reactions: req.body } },
         { runValidators: true, new: true }
       );
 
-      if (!dbThoughtData) {
+      if (!thoughtData) {
         return res.status(404).json({ message: "No thought with this id!" });
       }
 
-      res.json(dbThoughtData);
+      res.json(thoughtData);
     } catch (err) {
       console.log(err);
       res.status(500).json(err);
@@ -122,17 +139,17 @@ const thoughtController = {
   // remove reaction from a thought
   async removeReaction(req, res) {
     try {
-      const dbThoughtData = await Thought.findOneAndUpdate(
+      const thoughtData = await Thought.findOneAndUpdate(
         { _id: req.params.thoughtId },
         { $pull: { reactions: { reactionId: req.params.reactionId } } },
         { runValidators: true, new: true }
       );
 
-      if (!dbThoughtData) {
+      if (!thoughtData) {
         return res.status(404).json({ message: "No thought with this id!" });
       }
 
-      res.json(dbThoughtData);
+      res.json(thoughtData);
     } catch (err) {
       console.log(err);
       res.status(500).json(err);
@@ -140,4 +157,5 @@ const thoughtController = {
   },
 };
 
+// Exports thoughtController and all Methods as Module
 module.exports = thoughtController;

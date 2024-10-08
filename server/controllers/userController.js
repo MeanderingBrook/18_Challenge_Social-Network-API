@@ -1,91 +1,110 @@
 // Imports required App Modules
 const { User, Thought } = require("../models");
 
+// Assigns all User Methods to 'userController' Variable
+// Methods deconstructed in userRoutes.js
 const userController = {
-  // get all users
+  // Defines GET Method for All Users
+  // http://localhost:3001/api/users
   async getUsers(req, res) {
     try {
-      const dbUserData = await User.find().select("-__v");
+      const userData = await User.find().select("-__v");
+      // console.log("userController Line 11: All Users:", userData);
 
-      res.json(dbUserData);
+      res.json(userData);
     } catch (err) {
       console.log(err);
       res.json(err);
     }
   },
-  // get single user by id
+
+  // Defines GET Method for a User by ID
+  // http://localhost:3001/api/users/:userId
   async getUser(req, res) {
     try {
-      const dbUserData = await User.findOne({ _id: req.params.userId })
+      const userData = await User.findOne({ _id: req.params.userId })
         .select("-__v")
         .populate("friends")
         .populate("thoughts");
+      console.log("userController Line 27: Selected User:", userData);
 
-      if (!dbUserData) {
-        return res.status(404).json({ message: "No user with this id!" });
+      if (!userData) {
+        return res.json({
+          message: "User with the submitted ID does not exist.",
+        });
       }
 
-      res.json(dbUserData);
+      res.json(userData);
     } catch (err) {
       console.log(err);
       res.json(err);
     }
   },
-  // create a new user
-  async newUser(req, res) {
-    console.log("Incoming Data: ", req.body);
 
-    let testUser = {
-      userName: req.body.userName,
-      emailAddress: req.body.emailAddress,
-    };
+  // Defines POST Method for New User
+  // http://localhost:3001/api/users
+  async newUser(req, res) {
+    console.log("userController.js Line 44: New User Data: ", req.body);
+
+    // let testUser = {
+    //   userName: req.body.userName,
+    //   emailAddress: req.body.emailAddress,
+    // };
 
     try {
-      // const dbUserData = await User.create(req.body);
-      const dbUserData = await User.create(testUser);
-      res.json(dbUserData);
+      const userData = await User.create(req.body);
+      // const userData = await User.create(testUser);
+      res.json(userData);
     } catch (err) {
       console.log(err);
-      res.status(500).json(err);
+      res.json(err);
     }
   },
-  // update a user
+
+  // Defines PUT Method for existing User by ID
+  // http://localhost:3001/api/users/:userId
   async updateUser(req, res) {
     try {
-      const dbUserData = await User.findOneAndUpdate(
+      const userData = await User.findOneAndUpdate(
         { _id: req.params.userId },
         {
           $set: req.body,
         },
         {
-          runValidators: true,
+          // runValidators: true,
           new: true,
         }
       );
 
-      if (!dbUserData) {
-        return res.status(404).json({ message: "No user with this id!" });
+      if (!userData) {
+        return res.json({
+          message: "User with the submitted ID does not exist.",
+        });
       }
 
-      res.json(dbUserData);
+      res.json(userData);
     } catch (err) {
       console.log(err);
-      res.status(500).json(err);
+      res.json(err);
     }
   },
-  // delete user (BONUS: and delete associated thoughts)
+
+  // Defines DELETE Method for existing User by ID
+  // http://localhost:3001/api/users/:userId
   async deleteUser(req, res) {
     try {
-      const dbUserData = await User.findOneAndDelete({
+      const userData = await User.findOneAndDelete({
         _id: req.params.userId,
       });
 
-      if (!dbUserData) {
-        return res.status(404).json({ message: "No user with this id!" });
+      if (!userData) {
+        return res.json({
+          message: "User with the submitted ID does not exist.",
+        });
       }
 
       // BONUS: get ids of user's `thoughts` and delete them all
-      await Thought.deleteMany({ _id: { $in: dbUserData.thoughts } });
+      await Thought.deleteMany({ _id: { $in: userData.thoughts } });
       res.json({ message: "User and associated thoughts deleted!" });
     } catch (err) {
       console.log(err);
@@ -96,73 +115,46 @@ const userController = {
   // add friend to friend list
   async addFriend(req, res) {
     try {
-      const dbUserData = await User.findOneAndUpdate(
+      const userData = await User.findOneAndUpdate(
         { _id: req.params.userId },
         { $addToSet: { friends: req.params.friendId } },
         { new: true }
       );
 
-      if (!dbUserData) {
-        return res.status(404).json({ message: "No user with this id!" });
+      if (!userData) {
+        return res.json({
+          message: "User with the submitted ID does not exist.",
+        });
       }
 
-      res.json(dbUserData);
+      res.json(userData);
     } catch (err) {
       console.log(err);
-      res.status(500).json(err);
+      res.json(err);
     }
   },
   // remove friend from friend list
   async removeFriend(req, res) {
     try {
-      const dbUserData = await User.findOneAndUpdate(
+      const userData = await User.findOneAndUpdate(
         { _id: req.params.userId },
         { $pull: { friends: req.params.friendId } },
         { new: true }
       );
 
-      if (!dbUserData) {
-        return res.status(404).json({ message: "No user with this id!" });
+      if (!userData) {
+        return res.json({
+          message: "User with the submitted ID does not exist.",
+        });
       }
 
-      res.json(dbUserData);
+      res.json(userData);
     } catch (err) {
       console.log(err);
-      res.status(500).json(err);
+      res.json(err);
     }
   },
 };
 
+// Exports userController and all Methods as Module
 module.exports = userController;
-
-// const { User, Thought } = require("../models");
-
-// //const userController = {
-// const userController = {
-//   async getAllUsers(req, res) {
-//     console.log("Fetching All Users");
-//     try {
-//       const allUsers = await User.find().select("-__v");
-
-//       res.json(allUsers);
-//     } catch (err) {
-//       console.log(err);
-//       res.json(err);
-//     }
-//   },
-// };
-
-// /*
-// module.exports = getAllUsers = async (req, res) => {
-//   try {
-//     const allUsers = await User.find().select("-__v");
-
-//     res.json(allUsers);
-//   } catch (err) {
-//     console.log(err);
-//     res.json(err);
-//   }
-// };
-// */
-
-// module.exports = userController;
