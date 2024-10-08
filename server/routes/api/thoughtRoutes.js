@@ -35,10 +35,10 @@ router.route("/:thoughtId").put(updateThought);
 router.route("/:thoughtId").delete(deleteThought);
 
 // /api/thoughts/:thoughtId/reactions
-router.route("/:thoughtId/reactions").post(addReaction);
+// router.route("/:thoughtId/reactions").post(addReaction);
 
 // /api/thoughts/:thoughtId/reactions/:reactionId
-router.route("/:thoughtId/reactions/:reactionId").delete(removeReaction);
+// router.route("/:thoughtId/reactions/:reactionId").delete(removeReaction);
 
 // Exports Routes for use in App
 module.exports = router;
