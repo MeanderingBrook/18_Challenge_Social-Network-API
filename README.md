@@ -117,7 +117,7 @@ https://github.com/MeanderingBrook/18_Challenge_Social-Network-API.git
 
 ## Screencastify Walkthrough Location
 
-https://drive.google.com/file/d/1MIELDV0AiKmOGU91HSQMatdm-hNvqIG7/view
+https://drive.google.com/file/d/1BZs47j5MkJJlc8jbJjIpzpVoAVQGoyJa/view
 
 
 ## Application Screenshots
