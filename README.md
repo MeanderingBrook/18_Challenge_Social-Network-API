@@ -115,21 +115,21 @@ Return value and generated content testing and data evaluation, see superseded.j
 https://github.com/MeanderingBrook/18_Challenge_Social-Network-API.git
 
 
-## Screencastify Walkthough Location
+## Screencastify Walkthrough Location
 
-https://project02-2.onrender.com/
+https://drive.google.com/file/d/1MIELDV0AiKmOGU91HSQMatdm-hNvqIG7/view
 
 
 ## Application Screenshots
 
-![Social Network API: User Profile Inventory - Screenshot 01](./assets/images/Note-Taker_Nodejs-App_Screenshot-01_Homepage.png?raw=true "Social Network API: User Profile Inventory")
+![Social Network API: User Profile Inventory - Screenshot 01](./assets/images/Social-Network-API_Screenshot-01_User-Profile-Inventory.png?raw=true "Social Network API: User Profile Inventory")
 
-![Social Network API: User Profile Editing - Screenshot 02](./assets/images/Note-Taker_Nodejs-App_Screenshot-02_Note-Creation.png?raw=true "Social Network API: User Profile Editing")
+![Social Network API: User Profile Editing - Screenshot 02](./assets/images/Social-Network-API_Screenshot-02_User-Profile-Editing.png?raw=true "Social Network API: User Profile Editing")
 
-![Social Network API: User Profile Deletion - Screenshot 03](./assets/images/Note-Taker_Nodejs-App_Screenshot-03_Category-Mgt.png?raw=true "Note Taker: Node.js Category Management")
+![Social Network API: User Profile Deletion - Screenshot 03](./assets/images/Social-Network-API_Screenshot-03_User-Profile-Deletion.png?raw=true "Social Network API: User Profile Deletion")
 
-![Social Network API: Thought Inventory - Screenshot 04](./assets/images/Note-Taker_Nodejs-App_Screenshot-04_Note-Mgt.png?raw=true "Social Network API: Thought Inventory")
+![Social Network API: Thought Inventory - Screenshot 04](./assets/images/Social-Network-API_Screenshot-04_Thought-Inventory.png?raw=true "Social Network API: Thought Inventory")
 
-![Social Network API: Thought Editing - Screenshot 05](./assets/images/Note-Taker_Nodejs-App_Screenshot-05_User-Registration.png?raw-true "Social Network API: Thought Editing")
+![Social Network API: Thought Editing - Screenshot 05](./assets/images/Social-Network-API_Screenshot-05_Thought-Editing.png?raw-true "Social Network API: Thought Editing")
 
-![Social Network API: Thought Deletion - Screenshot 06](./assets/images/Note-Taker_Nodejs-App_Screenshot-05_User-Registration.png?raw-true "Social Network API: Thought Deletion")
+![Social Network API: Thought Deletion - Screenshot 06](./assets/images/Social-Network-API_Screenshot-06_Thought-Deletion.png?raw-true "Social Network API: Thought Deletion")

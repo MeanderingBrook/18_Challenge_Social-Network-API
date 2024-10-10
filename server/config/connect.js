@@ -10,8 +10,5 @@ mongoose.connect(process.env.MONGODB_URI, {
   // useUnifiedTopology: true,
 });
 
-// Establishes connection to local MongoDB Instance through String Literal
-// mongoose.connect("mongodb://127.0.0.1:27017/socialmedia");
-
 // Exports MongoDB Connection
 module.exports = mongoose.connection;
