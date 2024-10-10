@@ -10,8 +10,8 @@ const {
   newUser,
   updateUser,
   deleteUser,
-  addFriend,
-  removeFriend,
+  newFriend,
+  deleteFriend,
 } = require("../../controllers/userController");
 
 // Defines GET Route for All Users
@@ -34,9 +34,13 @@ router.route("/:userId").put(updateUser);
 // Note: Prefixed by, api/users
 router.route("/:userId").delete(deleteUser);
 
-// Defines GET Route for User Friends
+// Defines POST Route for User Friends
 // Note: Prefixed by, api/users
-// router.route("/:userId/friends/:friendId").post(addFriend).delete(removeFriend);
+router.route("/:userId/friends/:friendId").post(newFriend);
+
+// Defines DELETE Route for User Friends
+// Note: Prefixed by, api/users
+router.route("/:userId/friends/:friendId").delete(deleteFriend);
 
 // Exports Routes for use in App
 module.exports = router;

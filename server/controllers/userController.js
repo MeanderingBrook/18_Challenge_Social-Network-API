@@ -9,7 +9,7 @@ const userController = {
   async getUsers(req, res) {
     try {
       const userData = await User.find().select("-__v");
-      // console.log("userController Line 11: All Users:", userData);
+      // console.log("userController Line 12: All Users:", userData);
 
       res.json(userData);
     } catch (err) {
@@ -25,9 +25,7 @@ const userController = {
       const userData = await User.findOne({ _id: req.params.userId }).select(
         "-__v"
       );
-      // .populate("friends")
-      // .populate("thoughts");
-      console.log("userController Line 27: Selected User:", userData);
+      console.log("userController Line 30: Selected User:", userData);
 
       if (!userData) {
         return res.json({
@@ -45,7 +43,7 @@ const userController = {
   // Defines POST Method for New User
   // http://localhost:3001/api/users
   async newUser(req, res) {
-    console.log("userController.js Line 44: New User Data: ", req.body);
+    // console.log("userController.js Line 48: New User Data: ", req.body);
 
     // let testUser = {
     //   userName: req.body.userName,
@@ -72,7 +70,6 @@ const userController = {
           $set: req.body,
         },
         {
-          // runValidators: true,
           new: true,
         }
       );
@@ -104,57 +101,58 @@ const userController = {
         });
       }
 
-      // // BONUS: get ids of user's `thoughts` and delete them all
-      // await Thought.deleteMany({ _id: { $in: userData.thoughts } });
       res.json({ message: "User deleted." });
     } catch (err) {
       console.log(err);
-      res.status(500).json(err);
+      res.json(err);
     }
   },
 
-  // // add friend to friend list
-  // async addFriend(req, res) {
-  //   try {
-  //     const userData = await User.findOneAndUpdate(
-  //       { _id: req.params.userId },
-  //       { $addToSet: { friends: req.params.friendId } },
-  //       { new: true }
-  //     );
+  // Defines POST Method for new Friend by ID
+  // http://localhost:3001/api/users/:userId/friends/:friendId
+  async newFriend(req, res) {
+    try {
+      const userData = await User.findOneAndUpdate(
+        { _id: req.params.userId },
+        { $addToSet: { friends: req.params.friendId } },
+        { new: true }
+      );
 
-  //     if (!userData) {
-  //       return res.json({
-  //         message: "User with the submitted ID does not exist.",
-  //       });
-  //     }
+      if (!userData) {
+        return res.json({
+          message: "User with the submitted ID does not exist.",
+        });
+      }
 
-  //     res.json(userData);
-  //   } catch (err) {
-  //     console.log(err);
-  //     res.json(err);
-  //   }
-  // },
-  // // remove friend from friend list
-  // async removeFriend(req, res) {
-  //   try {
-  //     const userData = await User.findOneAndUpdate(
-  //       { _id: req.params.userId },
-  //       { $pull: { friends: req.params.friendId } },
-  //       { new: true }
-  //     );
+      res.json(userData);
+    } catch (err) {
+      console.log(err);
+      res.json(err);
+    }
+  },
 
-  //     if (!userData) {
-  //       return res.json({
-  //         message: "User with the submitted ID does not exist.",
-  //       });
-  //     }
+  // Defines DELETE Method for existing Friend by ID
+  // http://localhost:3001/api/users/:userId/friends/:friendId
+  async deleteFriend(req, res) {
+    try {
+      const userData = await User.findOneAndUpdate(
+        { _id: req.params.userId },
+        { $pull: { friends: req.params.friendId } },
+        { new: true }
+      );
 
-  //     res.json(userData);
-  //   } catch (err) {
-  //     console.log(err);
-  //     res.json(err);
-  //   }
-  // },
+      if (!userData) {
+        return res.json({
+          message: "User with the submitted ID does not exist.",
+        });
+      }
+
+      res.json(userData);
+    } catch (err) {
+      console.log(err);
+      res.json(err);
+    }
+  },
 };
 
 // Exports userController and all Methods as Module

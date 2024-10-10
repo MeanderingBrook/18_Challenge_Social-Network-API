@@ -10,8 +10,6 @@ const {
   newThought,
   updateThought,
   deleteThought,
-  addReaction,
-  removeReaction,
 } = require("../../controllers/thoughtController");
 
 // Defines GET Route for All Thoughts
@@ -33,12 +31,6 @@ router.route("/:thoughtId").put(updateThought);
 // Defines DELETE Route for Thought by ID
 // Note: Prefixed by, api/thoughts
 router.route("/:thoughtId").delete(deleteThought);
-
-// /api/thoughts/:thoughtId/reactions
-// router.route("/:thoughtId/reactions").post(addReaction);
-
-// /api/thoughts/:thoughtId/reactions/:reactionId
-// router.route("/:thoughtId/reactions/:reactionId").delete(removeReaction);
 
 // Exports Routes for use in App
 module.exports = router;

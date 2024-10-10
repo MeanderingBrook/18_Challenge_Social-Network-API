@@ -1,10 +1,6 @@
 // Imports required Node Modules
 const { Schema, model } = require("mongoose");
 
-// Imports required App Modules
-const reactionSchema = require("./Reaction");
-const dateFormat = require("../utils/dateFormat");
-
 const thoughtSchema = new Schema(
   {
     thought: {
@@ -15,13 +11,11 @@ const thoughtSchema = new Schema(
     createdAt: {
       type: Date,
       default: Date.now,
-      // get: (timestamp) => dateFormat(timestamp),
     },
     userName: {
       type: String,
       required: true,
     },
-    // reactions: [reactionSchema],
   },
   {
     toJSON: {
@@ -30,10 +24,6 @@ const thoughtSchema = new Schema(
     id: false,
   }
 );
-
-// thoughtSchema.virtual("reactionCount").get(function () {
-//   return this.reactions.length;
-// });
 
 // Assigns User Model to Constant
 const Thought = model("Thought", thoughtSchema);
